@@ -1,8 +1,11 @@
 # Discord Lobby System
 
+!!! info "Discord-Compatible Feature"
+This feature implements the official [Discord Lobby API](https://discord.com/developers/docs/resources/lobby). Anticensor stores lobbies in memory rather than persistent storage for performance and ephemeral behavior.
+
 ## Overview
 
-The Lobby system in Anticensor provides ephemeral, in-memory matchmaking and group coordination functionality similar to Discord's lobby feature. Lobbies are temporary gathering spaces that allow users to coordinate activities, find teammates, or organize groups before moving to permanent channels.
+The Lobby system provides ephemeral, in-memory matchmaking and group coordination functionality following Discord's lobby specification. Lobbies are temporary gathering spaces that allow users to coordinate activities, find teammates, or organize groups before moving to permanent channels.
 
 Unlike most other Anticensor features, lobbies are **not persisted to the database**. They exist only in memory and are automatically cleaned up when they expire or when the server restarts.
 

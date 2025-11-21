@@ -1,8 +1,11 @@
 # User Consent Management
 
+!!! warning "Anticensor Extension"
+This feature is specific to Anticensor and is not part of the official Discord API. Clients and libraries expecting standard Discord behavior will not have built-in support for this feature.
+
 ## Overview
 
-The User Consent Management system in Anticensor provides a mechanism for tracking user consent to various services and data processing activities. This feature enables GDPR compliance and allows users to manage their consent preferences for different services integrated with the platform.
+The User Consent Management system provides a mechanism for tracking user consent to various services and data processing activities. This feature enables GDPR compliance and allows users to manage their consent preferences for different services integrated with the platform.
 
 ## Architecture
 

@@ -1,5 +1,8 @@
 # Configurable Limits System
 
+!!! warning "Anticensor Extension"
+This feature is specific to Anticensor and is not part of the official Discord API. Discord has fixed limits that cannot be configured per-guild.
+
 ## Overview
 
 Anticensor provides a comprehensive configurable limits system that allows instance administrators to customize various restrictions and boundaries throughout the platform. This system addresses 48+ configuration issues by providing fine-grained control over limits that were previously hardcoded.

@@ -1,8 +1,11 @@
 # Thread Promotion
 
+!!! warning "Anticensor Extension"
+This feature is specific to Anticensor and is not part of the official Discord API. Discord does not support converting threads to top-level channels.
+
 ## Overview
 
-Thread Promotion is an Anticensor feature that allows converting active threads into top-level guild channels. This is useful when a discussion in a thread becomes important enough to warrant its own permanent channel, or when organizing community structure dynamically based on activity.
+Thread Promotion allows converting active threads into top-level guild channels. This is useful when a discussion in a thread becomes important enough to warrant its own permanent channel, or when organizing community structure dynamically based on activity.
 
 ## Use Cases
 

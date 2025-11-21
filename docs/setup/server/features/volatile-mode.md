@@ -1,8 +1,11 @@
 # Volatile Mode
 
+!!! warning "Anticensor Extension"
+This feature is specific to Anticensor and is not part of the official Discord API. This is a server configuration option for testing and development.
+
 ## Overview
 
-Volatile Mode is an Anticensor feature that enables running the server with an in-memory SQLite database instead of a persistent database. This mode is designed for testing, development, and ephemeral deployments where data persistence is not required.
+Volatile Mode enables running the server with an in-memory SQLite database instead of a persistent database. This mode is designed for testing, development, and ephemeral deployments where data persistence is not required.
 
 When Volatile Mode is enabled, **all data is stored in memory and will be lost when the server stops or restarts**.
 

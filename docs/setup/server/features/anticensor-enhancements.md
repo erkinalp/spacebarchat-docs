@@ -1,66 +1,29 @@
 # Anticensor Feature Enhancements
 
+!!! warning "Anticensor Extensions"
+This document covers various enhancements and extensions that Anticensor provides beyond the standard Discord API. These features may not be compatible with standard Discord clients or libraries.
+
 This document covers various enhancements and extensions that Anticensor provides beyond the standard Spacebar implementation.
-
-## Slowmode Enhancements
-
-### Overview
-
-Anticensor extends the slowmode (rate limit per user) feature to support arbitrary time intervals, removing Discord's artificial limitations on slowmode durations.
-
-### Discord Limitations
-
-Discord's official implementation only allows specific slowmode values:
-
-- 0 seconds (disabled)
-- 5, 10, 15, 30 seconds
-- 1, 2, 6 hours
-- 21600 seconds (6 hours maximum)
-
-### Anticensor Enhancement
-
-Anticensor allows **any duration from 0 to 21600 seconds** (6 hours), giving administrators fine-grained control over message pacing.
-
-### Configuration
-
-Set slowmode on a channel using the channel update endpoint:
-
-```json
-PATCH /channels/:channel_id
-{
-  "rate_limit_per_user": 45
-}
-```
-
-This sets a 45-second slowmode, which is not possible in Discord's official implementation.
-
-### Use Cases
-
-1. **Fine-Tuned Moderation**: Set 7-second slowmode for slightly faster-paced discussions
-2. **Custom Intervals**: Use 90 seconds (1.5 minutes) for specific community needs
-3. **Gradual Adjustment**: Incrementally adjust slowmode based on chat activity
-4. **Event Channels**: Set precise intervals for Q&A sessions or announcements
-
-### Implementation
-
-The slowmode enforcement is implemented in the message creation handler and validates that users respect the `rate_limit_per_user` setting on channels. The arbitrary seconds support means you can set any value within the valid range without being restricted to Discord's preset options.
 
 ## PIN_MESSAGES Permission
 
+!!! warning "Compatibility Warning"
+Anticensor uses bit 38 for PIN_MESSAGES, while Discord officially uses bit 51 (0x0008000000000000). This divergence means clients and libraries expecting Discord's standard permission bit map may misinterpret this permission. See [Discord's official permissions documentation](https://discord.com/developers/docs/topics/permissions) for comparison.
+
 ### Overview
 
-Anticensor splits message pinning functionality from the `MANAGE_MESSAGES` permission into a dedicated `PIN_MESSAGES` permission. This provides more granular control over who can pin messages in channels.
+Anticensor implements a dedicated `PIN_MESSAGES` permission at bit position 38, separate from the `MANAGE_MESSAGES` permission. This provides more granular control over who can pin messages in channels.
 
 ### Permission Details
 
-- **Bit Position**: 38
+- **Bit Position**: 38 (Anticensor-specific, differs from Discord's bit 51)
 - **Value**: `1 << 38` = `274877906944`
 - **Scope**: Channel-level permission
 - **Default**: Not included in default permissions
 
 ### Rationale
 
-In Discord, pinning messages requires the `MANAGE_MESSAGES` permission, which also grants the ability to delete any message. This is overly broad for communities that want to allow trusted members to pin important messages without giving them moderation powers.
+In Discord, pinning messages requires the `MANAGE_MESSAGES` permission, which also grants the ability to delete any message. Anticensor separates this functionality to allow trusted members to pin important messages without giving them full moderation powers.
 
 ### Use Cases
 
@@ -200,6 +163,9 @@ To enable doubly-linked replies in your client:
 
 ## Guild Template Enhancements
 
+!!! info "Discord Compatibility"
+Guild templates are an official Discord feature. Anticensor extends this by supporting the `discord:` prefix to fetch templates directly from Discord.com, which is not part of the standard Discord API specification. See [Discord's guild template documentation](https://discord.com/developers/docs/resources/guild-template) for the base feature.
+
 ### Overview
 
 Anticensor extends guild template support to include Discord.com templates and external template sources, not just locally-created templates.
@@ -217,7 +183,7 @@ Anticensor supports three template code formats:
     }
     ```
 
-2. **Discord Templates**: Templates from Discord.com using `discord:` prefix
+2. **Discord Templates** (Anticensor Extension): Templates from Discord.com using `discord:` prefix
 
     ```
     POST /guilds
