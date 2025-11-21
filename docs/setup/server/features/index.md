@@ -17,7 +17,8 @@ These features extend beyond the standard Discord API and are specific to Antice
 - [Volatile Mode](volatile-mode.md) - In-memory database for testing and development
 - [Configurable Limits](configurable-limits.md) - Comprehensive limit configuration system with per-guild overrides
 - [Anticensor Enhancements](anticensor-enhancements.md) - Additional feature enhancements including:
-    - PIN_MESSAGES permission (uses bit 38 instead of Discord's bit 51)
+    - Slowmode with arbitrary seconds (Discord.com UI only allows presets)
+    - PIN_MESSAGES permission split from MANAGE_MESSAGES (now uses Discord's bit 51)
     - Doubly-linked replies for conversation threading
     - Guild template support for Discord.com templates (discord: prefix)
     - Privacy gating for third-party connections

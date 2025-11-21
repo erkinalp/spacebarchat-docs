@@ -5,19 +5,67 @@ This document covers various enhancements and extensions that Anticensor provide
 
 This document covers various enhancements and extensions that Anticensor provides beyond the standard Spacebar implementation.
 
-## PIN_MESSAGES Permission
+## Slowmode (Arbitrary Seconds)
 
-!!! warning "Compatibility Warning"
-Anticensor uses bit 38 for PIN_MESSAGES, while Discord officially uses bit 51 (0x0008000000000000). This divergence means clients and libraries expecting Discord's standard permission bit map may misinterpret this permission. See [Discord's official permissions documentation](https://discord.com/developers/docs/topics/permissions) for comparison.
+!!! info "Discord API Compatibility"
+The Discord API supports `rate_limit_per_user` values from 0-21600 seconds. However, Discord.com's UI only exposes preset values (0, 5, 10, 15, 30 seconds, 1, 2, 5, 10 minutes, 1, 2, 6 hours). Anticensor allows setting arbitrary second values within the full API range, which is an extension beyond what Discord.com's interface provides. See [Discord's channel documentation](https://discord.com/developers/docs/resources/channel#channel-object-channel-structure) for the API specification.
 
 ### Overview
 
-Anticensor implements a dedicated `PIN_MESSAGES` permission at bit position 38, separate from the `MANAGE_MESSAGES` permission. This provides more granular control over who can pin messages in channels.
+Anticensor supports setting channel slowmode (`rate_limit_per_user`) to any value between 0 and 21600 seconds (6 hours), while Discord.com's interface restricts users to specific preset values.
+
+### API Usage
+
+Set slowmode to any arbitrary value using the channel modification endpoint:
+
+```http
+PATCH /channels/:channel_id
+Content-Type: application/json
+
+{
+  "rate_limit_per_user": 7
+}
+```
+
+This sets a 7-second slowmode, which is not available through Discord.com's UI but is valid per the API specification.
+
+### Supported Range
+
+- **Minimum**: 0 seconds (no slowmode)
+- **Maximum**: 21600 seconds (6 hours)
+- **Granularity**: 1 second
+
+### Discord.com Presets vs Anticensor
+
+| Discord.com UI Presets | Anticensor Support |
+| ---------------------- | ------------------ |
+| 0, 5, 10, 15, 30s      | Any 0-21600s       |
+| 1m, 2m, 5m, 10m        | Any 0-21600s       |
+| 1h, 2h, 6h             | Any 0-21600s       |
+
+### Use Cases
+
+1. **Fine-Grained Rate Limiting**: Set precise slowmode values like 3 seconds or 45 seconds
+2. **Custom Moderation**: Implement slowmode values tailored to specific channel needs
+3. **Gradual Restrictions**: Incrementally adjust slowmode in response to activity levels
+4. **Event Management**: Set specific slowmode values for timed events
+
+!!! note "Client Compatibility"
+Some Discord clients may not display arbitrary slowmode values correctly in their UI, as they expect only the preset values. However, the slowmode will still function correctly at the API level.
+
+## PIN_MESSAGES Permission
+
+!!! info "Discord Compatibility"
+As of the latest version, Anticensor uses bit 51 for PIN_MESSAGES, matching Discord's official permission bit position (0x0008000000000000). This ensures full compatibility with Discord clients and libraries. See [Discord's official permissions documentation](https://discord.com/developers/docs/topics/permissions) for reference.
+
+### Overview
+
+Anticensor implements a dedicated `PIN_MESSAGES` permission at bit position 51, separate from the `MANAGE_MESSAGES` permission. This provides more granular control over who can pin messages in channels.
 
 ### Permission Details
 
-- **Bit Position**: 38 (Anticensor-specific, differs from Discord's bit 51)
-- **Value**: `1 << 38` = `274877906944`
+- **Bit Position**: 51 (matches Discord standard)
+- **Value**: `1 << 51` = `2251799813685248` (0x0008000000000000)
 - **Scope**: Channel-level permission
 - **Default**: Not included in default permissions
 
@@ -40,7 +88,7 @@ Grant the `PIN_MESSAGES` permission through role settings or channel overwrites:
 {
 	"id": "role_id",
 	"type": 0,
-	"allow": "274877906944",
+	"allow": "2251799813685248",
 	"deny": "0"
 }
 ```
